@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>SmilUp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png" type="image/png">
+  <meta name="theme-color" content="#2d6a4f">
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+      margin: 0; padding: 0; background: #d1fae5;
+      height: 100vh; display: flex; justify-content: center; align-items: center;
+    }
+    .container {
+      width: 100%; max-width: 410px; height: 100vh;
+      background: #fff; border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form button {
+      background: #2d6a4f;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .form {
+      padding: 10px;
+      text-align: center;
+    }
+    .form input {
+      padding: 10px;
+      width: 70%;
+      border: 1px solid #2d6a4f;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .chat-header {
+      background: #2d6a4f;
+      padding: 5px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+
+.container.dark-mode {
+  background: #333;
+  color: #fff;
+}
+
+button.dark-mode {
+  background: #4a7c5c;
+}
+
+input.dark-mode {
+  border: 1px solid #4a7c5c;
+}
+
+.chat-header.dark-mode {
+  background: #4a7c5c;
+}
+.services-grid {
+    display: grid;
+    gap: 15px; /* Space between grid items */
+    padding: 1px 28px;
+    grid-template-columns: 170px 170px;
+}
+.service-option {
+    display: block;
+    padding: 30px;
+    background: #2d6a4f;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+.service-option:hover {
+    background-color: #45a049;
+}
+
+grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Grid columns */
+.service-option:hover {
+    background-color: #45a049;
+}
+
+#selected-service {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+    img {
+      width: 100%;
+      max-width: 70px;
+      border-radius: 50px 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      margin: 5px auto;
+      display: none;
+      justify-content: center;
+    }
+    h3 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
+      color: white;
+      margin: 10px 0;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="chat-header">
+      <h2>Welcome! SmilUp Chatroom:</h2>
+    </div>
+   <div class="preview">
+   <img id="preview" />
+    <form id="signupForm" class="form">
+      <input type="text" id="username" placeholder="Your name" required>
+      <input type="file" id="profileImage" accept="image/*" required>
+      <br>
+      <button type="submit">Join</button>
+    </form>
+  </div>
+
+      <h3><strong>Our Services<strong></h3>
+        <div class="services-grid">
+            <button class="service-option" onclick="chooseService('Harusi')">
+                Coming Soon
+            </button>
+            <button class="service-option" onclick="chooseService('Sherehe ya Kuzaliwa')">
+                Coming Soon
+            </button>
+            <button class="service-option" onclick="chooseService('Mikutano ya Biashara')">
+                Coming Soon
+            </button>
+            <button class="service-option" onclick="chooseService('Sherehe za Familia')">
+                Coming soon
+            </button>
+            <button class="service-option" onclick="chooseService('Uundaji wa Matukio')">
+                Coming soon
+            </button>
+            <button class="service-option" onclick="chooseService('Uundaji wa Matukio')">
+                Coming soon
+            </button>
+        </div>
+
+        <p id="selected-service"></p>
+    </div>
+
+<!-- Firebase App (Core SDK) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS1rqg5FGHJoCrFcn61yJOvpTo-o5vspk",
+    authDomain: "smilupchat.firebaseapp.com",
+    databaseURL: "https://smilupchat-default-rtdb.firebaseio.com",
+    projectId: "smilupchat",
+    storageBucket: "smilupchat.appspot.com",
+    messagingSenderId: "484535306317",
+    appId: "1:484535306317:web:b844a39520327bf1347404",
+    measurementId: "G-9RSV87YW3T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const usernameInput = document.getElementById("username");
+      const preview = document.getElementById("preview");
+
+      // Weka jina na picha iliyopo kwenye Firebase
+      if (user.displayName) {
+        usernameInput.value = user.displayName;
+      }
+      if (user.photoURL) {
+        preview.src = user.photoURL;
+        preview.style.display = "block";
+      }
+
+      // Form submit
+      document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const username = usernameInput.value;
+        const profileImage = document.getElementById("profileImage").files[0];
+
+        if (username && profileImage) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            updateProfile(user, {
+              displayName: username,
+              photoURL: e.target.result
+            }).then(() => {
+              localStorage.setItem("username", username);
+              localStorage.setItem("profileImage", e.target.result);
+              window.location.href = "chatroom.html";
+            }).catch((error) => {
+              alert("Imeshindikana kuhifadhi profile: " + error.message);
+            });
+          };
+          reader.readAsDataURL(profileImage);
+        } else {
+          alert("Tafadhali jaza jina na chagua picha.");
+        }
+      });
+    } else {
+      // Mtumiaji hajalogin
+      window.location.href = "User-Sign_in.html";
+    }
+  });
+</script>
+
+  <script>
+    // On image change - show preview
+    document.getElementById("profileImage").addEventListener("change", function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById("preview");
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // On form submit
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const profileImage = document.getElementById("profileImage").files[0];
+
+      if (username && profileImage) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("profileImage", e.target.result); // save base64 image
+          window.location.href = "chatroom.html"; // redirect
+        };
+        reader.readAsDataURL(profileImage);
+      } else {
+        alert("Tafadhali jaza jina na chagua picha.");
+      }
+    });
+  </script>
+
+<script>
+  // Angalia ikiwa Dark Mode iko kwenye localStorage na weka kwenye body
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    document.querySelector(".container").classList.add("dark-mode");
+    document.querySelector("button").classList.add("dark-mode");
+    document.querySelectorAll("input").forEach(input => input.classList.add("dark-mode"));
+  }
+</script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log("✔ Service Worker registered"))
+        .catch(err => console.error("❌ Service Worker failed", err));
+    }
+  </script>
+
+    <script>
+        function chooseService(service) {
+            document.getElementById('selected-service').innerHTML = "Huduma Uliyochagua: " + service;
+        }
+    </script>
+</body>
+</html>

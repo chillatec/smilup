@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta name="theme-color" content="#4ade80">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChilLaTec | SmilUp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+<style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f0fff4;
+      text-align: center;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+.container.dark-mode {
+  background: #333;
+  color: #fff;
+}
+    header {
+      background: #2d6a4f;
+      max-height: 170px;
+      color: white;
+      text-align: center;
+      padding: 100px 0;
+    }
+    h4 {
+      max-height: 100px 20px;
+      padding: 10px 0;
+    }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      max-height: 100px;
+      color: white;
+      margin: 0.1px 0;
+    }
+    h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      color: white;
+      margin: 10px 0;
+    }
+    h3 {
+      font-size: 1em;
+      margin: 100px 0;
+      text-align: auto;
+      display: auto;
+    }
+    .chat-footer {
+      display: auto;
+      padding: 1px;
+      gap: 1px;
+      text-align: auto;
+    }
+    .form {
+      padding: 20px;
+      text-align: center;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 0 0;
+    }
+    img {
+      width: 100%;
+      max-width: 60px;
+      border-radius: 04px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 1px 0;
+      margin: 20px 0;
+    }
+    .form button {
+      background: #2d6a4f;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: darkgreen;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #2d6a4f;
+      border-radius: 8px;
+    }
+    .form input {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #2d6a4f;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 410px;
+      height: 100vh;
+      background: #ffffff;
+      display: flex;
+      margin: auto;
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+.spinner {
+  border: 6px solid #e0e0e0;
+  border-top: 6px solid #2d6a4f;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.message {
+  color: red;
+  font-weight: 500;
+  margin: 10px auto;
+  width: 90%;
+  word-wrap: break-word;
+  text-align: center;
+  padding: 5px 1px;
+  background-color: #ffe5e5;
+  border: 1px solid #ff0000;
+  border-radius: 8px;
+  display: none;
+}
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+<h4></h4>
+  <img src="assets/icon-512.png" alt="Logo" />
+  <h1>SmilUp</h1>
+  <p>Let's join together</p>
+  </header>
+
+  <div class="h2">
+  <h2></h2>
+
+<form id="signupForm" class="form" onsubmit="return false;">
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <button type="button" onclick="signUp()">SignUp</button>
+  <button type="button" onclick="loginUser()">Login</button>
+</form>
+
+<div id="loader" style="display:none; margin: 20px auto;">
+  <div class="spinner"></div>
+</div>
+  </div>
+
+    <p id="msg" class="message"></p>
+
+   <div class="chat-footer">
+   <h3>copyright(c) Chillatec.2025</h3>
+   </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+ 
+     const firebaseConfig = {
+      apiKey: "AIzaSyDS1rqg5FGHJoCrFcn61yJOvpTo-o5vspk",
+      authDomain: "smilupchat.firebaseapp.com",
+      databaseURL: "https://smilupchat-default-rtdb.firebaseio.com",
+      projectId: "smilupchat",
+      storageBucket: "smilupchat.appspot.com",
+      messagingSenderId: "484535306317",
+      appId: "1:484535306317:web:b844a39520327bf1347404",
+      measurementId: "G-9RSV87YW3T"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);  // Get Auth instance
+    const db = getDatabase(app);  // Get Realtime Database instance
+
+
+window.signUp = () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const loader = document.getElementById("loader");
+  const msg = document.getElementById("msg");
+
+  if (!email || !password) {
+    msg.style.display = "block";
+    msg.style.color = "red";
+    msg.style.backgroundColor = "#ffe5e5";
+    msg.textContent = "Please! write email and password.";
+    setTimeout(() => msg.style.display = "none", 5000);
+    return;
+  }
+
+  loader.style.display = "block";
+
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("uid", user.uid);
+      loader.style.display = "none";
+      msg.style.display = "block";
+      msg.style.color = "#1e4620";
+      msg.style.backgroundColor = "#d4edda";
+      msg.textContent = "Registered!";
+      setTimeout(() => { 
+      msg.style.display = "none";
+      }, 2000);
+    })
+    .catch((error) => {
+      loader.style.display = "none";
+      msg.style.display = "block";
+      msg.style.color = "red";
+      msg.style.backgroundColor = "#ffe5e5";
+      msg.textContent = "Signup failed: " + error.message;
+      setTimeout(() => msg.style.display = "none", 5000);
+    });
+};
+
+window.loginUser = () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const loader = document.getElementById("loader");
+  const msg = document.getElementById("msg");
+
+  loader.style.display = "block";
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("uid", user.uid);
+      loader.style.display = "none";
+      msg.style.display = "block";
+      msg.style.color = "#1e4620";
+      msg.style.backgroundColor = "#d4edda";
+      msg.textContent = "Registered!";
+      setTimeout(() => {
+        msg.style.display = "none";
+        window.location.href = "homepage.html";
+      }, 2000);
+    })
+    .catch((error) => {
+      loader.style.display = "none";
+      msg.style.display = "block";
+      msg.style.color = "red";
+      msg.style.backgroundColor = "#ffe5e5";
+      msg.textContent = "Problem!: " + error.message;
+      setTimeout(() => msg.style.display = "none", 5000);
+    });
+};
+</script>
+<script>
+  // Angalia ikiwa Dark Mode iko kwenye localStorage na weka kwenye body
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    document.querySelector(".container").classList.add("dark-mode");
+    document.querySelector("button").classList.add("dark-mode");
+    document.querySelectorAll("input").forEach(input => input.classList.add("dark-mode"));
+  }
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log("✔ Service Worker registered"))
+      .catch(err => console.error("❌ Service Worker failed", err));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mpangilio - SmilUp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0fdf4;
+      color: #1b4332;
+      overflow: hidden;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .container {
+      width: 100%;
+      max-width: 410px;
+      height: 90vh;
+      background: #ffffff;
+      display: flex;
+      margin: auto;
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .settings-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+.settings-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+body.dark-mode .settings-header {
+  background-color: #444;
+}
+
+body.dark-mode .menu-item:hover {
+  background-color: #555;
+}
+    .menu-item {
+      background-color:  #fff;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    .menu-item:hover {
+      background-color: #d8f3dc;
+    }
+
+    .dark-mode {
+      background-color: #1b1b1b;
+      color: #eee;
+    }
+
+    .menu-icon {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+body.dark-mode .menu-item {
+  background-color: #333;
+  color: #eee;
+}
+body.dark-mode .container {
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+@media (max-width: 480px) {
+  .container {
+    height: auto;
+    padding: 10px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .menu-item {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+/* Modal Styles */
+.modal {
+  display: none; 
+  position: absolute; 
+  z-index: 9999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  padding: 20px;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 3% 20%;
+  border-radius: 12px;
+  padding: 10px;
+  width: 90%;
+  max-width: 50vh;
+  max-height: 80vh;
+  overflow: auto;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+body.dark-mode .modal-content {
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+.close {
+  color: #aaa;
+  font-size: 28px;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+@media (max-width: 480px) {
+  .modal-content .container {
+    width: 95%;
+    max-width: 95%;
+    margin: 15% auto;
+    max-height: 75vh;
+  }
+}
+
+  </style>
+</head>
+<body>
+<!-- Modal ya About SmilUp -->
+<div class="container">
+<div id="aboutModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="profile-container">
+      <div class="logo" style="text-align:center;">
+        <img src="icons/icon-192.png" alt="logo" style="width: 60px;border-radius: 20px; "/>
+        <img src="icons/chillatec.png" alt="logo" style="width: 60px;"/>
+        <h2>SmilUp | ChilLatec</h2>
+      </div>
+
+      <p><strong>Jina:</strong> Chilala A. Mlaponi</p>
+      <p><strong>Mtaalamu:</strong> Mhandisi wa Teknolojia ya Habari (IT) na Mbunifu wa Programu @ChilLatec</p>
+      <p>
+        Nina shauku ya kubuni programu na mifumo bora ya kiteknolojia inayolenga kuboresha maisha ya watu. Kupitia SmilUp, nalenga kuleta furaha kwa teknolojia rafiki, hasa katika matukio ya kijamii.
+      </p>
+      <p>
+       Wazo la <strong>SmilUp</strong> lilizaliwa kutoka kwenye hitaji la kuwa na njia rahisi, 
+       ya kisasa na ya kidigitali ya kutuma mialiko ya hafla mbalimbali kama harusi, sherehe za 
+       kuzaliwa, send-off, na mingineyo. Nilihitaji jukwaa ambalo linakwenda mbali zaidi ya kadi 
+       za kawaida – bali linawezesha ushirikiano, mawasiliano, na sherehe kwa njia ya kipekee na kuvutia.
+      </p>
+    <h3>🚀 Upanuzi wa SmilUp</h3>
+   <p>
+      Sasa SmilUp haibaki tu kwenye mialiko. Inapanuka kuwa jukwaa la kijamii linalowezesha:
+      <ul>
+        <li>Watumiaji kupakia picha na video</li>
+        <li>Kuwasiliana kupitia chat na video calls</li>
+        <li>Kuweka akaunti zao binafsi</li>
+        <li>Kushiriki matukio na kumbukumbu muhimu</li>
+      </ul>
+    </p>
+
+  <p>Ndoto yangu ni kuona SmilUp ikiwa sehemu ya maisha ya kila siku – 
+     mahali pa furaha, urafiki, na ubunifu.</p>
+
+    <h3>🤝 Ushirikiano</h3>
+    <p>
+      Nipo tayari kufanya kazi na mtu yeyote binafsi au taasisi 
+      yoyote yenye malengo ya kidigitali, iwe ni kwenye:
+      <ul>
+        <li>Uundaji wa tovuti au programu</li>
+        <li>Ujenzi wa majukwaa ya kijamii</li>
+        <li>Ubunifu wa kadi za kidigitali</li>
+        <li>Miradi mingine ya kiteknolojia au kibiashara</li>
+      </ul>
+    </p>
+
+    <p>
+      Tuwasiliane na tufanye kazi pamoja kuleta suluhisho bunifu kwa jamii yetu.</p>
+    
+<h3><strong>Contact me:<strong></h3>
+<p>Tel: 255 654 318 014 | chilalamlaponi00@gmail.com</p>
+
+    <p><strong>@ChilLatec | SmilUp – Let's talk together</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="settings-header">
+  <h2>⚙️ Settings</h2>
+ <div class="menu-item" onclick="window.location.href='chatroom.html'">
+  <span><span class="menu-icon">⬅️</span> Back</span>
+</div>
+
+<div class="settings-menu">
+  <div class="menu-item" onclick="toggleDarkMode()">
+    <span><span class="menu-icon">🌙</span> Dark Mode</span>
+  </div>
+ <div class="menu-item" onclick="toggleSound()" id="soundToggle">
+  <span><span class="menu-icon">🔊</span> Notification: <strong id="soundStatus">On</strong></span>
+</div>
+  <div class="menu-item" onclick="goToAbout()">
+    <span><span class="menu-icon">ℹ️</span>About SmilUp</span>
+  </div>
+</div>
+
+<script>
+  // Weka theme kulingana na localStorage pindi ukurasa unavyofunguliwa
+  window.onload = function () {
+    const theme = localStorage.getItem("darkMode");
+    if (theme === "enabled") {
+      document.body.classList.add("dark-mode");
+    }
+  }
+
+  // Dark mode on/off
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+    localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+  }
+function updateSoundStatus() {
+  const status = localStorage.getItem("sound") || "on";
+  document.getElementById("soundStatus").textContent = status.charAt(0).toUpperCase() + status.slice(1);
+  const statusText = document.getElementById("soundStatus");
+
+  // Badilisha rangi kulingana na status
+  if (status === "on") {
+    statusText.style.color = "#4CAF50"; // Green for On
+  } else {
+    statusText.style.color = "#F44336"; // Red for Off
+  }
+}
+  // Sound on/off
+  function toggleSound() {
+    const current = localStorage.getItem("sound") || "on";
+    const newState = current === "on" ? "off" : "on";
+    localStorage.setItem("sound", newState);
+    updateSoundStatus();
+  }
+window.onload = function () {
+  const theme = localStorage.getItem("darkMode");
+  if (theme === "enabled") {
+    document.body.classList.add("dark-mode");
+  }
+  updateSoundStatus();
+}
+  // Kuhusu SmilUp
+function goToAbout() {
+  document.getElementById("aboutModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("aboutModal").style.display = "none";
+}
+window.onclick = function(event) {
+  const modal = document.getElementById("aboutModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+</body>
+</html>

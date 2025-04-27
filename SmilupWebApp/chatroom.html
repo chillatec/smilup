@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SmilUp Chatroom</title>
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2d6a4f">
+  <style>
+    body {
+      margin: 0; padding: 0;
+      background: #d1fae5;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 95%;
+      max-width: 410px;
+      height: 100vh;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #chat-header {
+      background: #2d6a4f;
+      padding: 10px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+    #chat-body {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f0fdf4;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-footer {
+      display: flex;
+      padding: 10px;
+      gap: 10px;
+      border-top: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+    .chat-footer input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #2d6a4f;
+      border-radius: 20px;
+      outline: none;
+      font-size: 16px;
+    }
+    .chat-footer button {
+      background: #2d6a4f;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .message {
+      display: flex;
+      flex-direction: column;
+      max-width: 75%;
+    }
+    .sent {
+      align-self: flex-end;
+      text-align: right;
+    }
+    .received {
+      align-self: flex-start;
+      text-align: left;
+    }
+    .bubble {
+      background: #dcfce7;
+      padding: 10px;
+      border-radius: 15px;
+      position: relative;
+      font-size: 15px;
+    }
+    .sent .bubble {
+      background: #bbf7d0;
+    }
+    .time {
+      font-size: 0.75em;
+      color: gray;
+      margin-top: 4px;
+      margin-left: 5px;
+    }
+    .chat-message {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px;
+    }
+    .chat-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+  .dropdown {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .dropbtn {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+body.dark-mode .dropdown-content {
+  background: #524d4d;
+  border-top: 1px solid #333;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    z-index: 1;
+  }
+
+.dropdown-content a {
+  color: black;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border-radius: 8px;
+}
+body.dark-mode .dropdown-content a {
+  color: white;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border-radius: 8px;
+}
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+  body.dark-mode .dropdown-content a:hover {
+    background-color: #3a3a3a;
+  }
+
+  .show {
+    display: block;
+  }
+
+  #chat-header {
+    position: relative;
+  }
+body.dark-mode {
+  background: #121212;
+  color: #fff;
+}
+
+.container.dark-mode {
+  background: #333;
+  color: #fff;
+}
+
+button.dark-mode {
+  background: #4a7c5c;
+}
+
+input.dark-mode {
+  border: 1px solid #4a7c5c;
+}
+
+.chat-header.dark-mode {
+  background: #4a7c5c;
+}
+
+body.dark-mode .container {
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #333;
+}
+body.dark-mode #chat-body {
+  background-color: #524d4d;
+}
+body.dark-mode .bubble {
+  background-color: #2d2d2d;
+  color: #fff;
+}
+
+body.dark-mode .sent .bubble {
+  background-color: #3a3a3a;
+}
+body.dark-mode .chat-footer {
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+}
+.dropdown-content div {
+  text-align: left;
+  padding: 1px;
+  color: black;
+  padding-left: 5px; /* Hii inaongeza nafasi upande wa kushoto */
+}
+body.dark-mode .dropdown-content div {
+  text-align: left;
+  padding: 1px;
+  color: white;
+  padding-left: 5px; /* Hii inaongeza nafasi upande wa kushoto */
+}
+@media (max-width: 480px) {
+  .container {
+    height: auto;
+    padding: 10px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .menu-item {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+.dropcontent {
+  background-color: #f0f0f0;
+  color: #000;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Dark mode styles */
+body.dark-mode .dropcontent {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.dropcontent div {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+body.dark-mode .dropcontent div {
+  border-bottom: 1px solid #444;
+}
+
+.dropcontent div:hover {
+  background-color: #ddd;
+}
+
+body.dark-mode .dropcontent div:hover {
+  background-color: #3a3a3a;
+}
+
+#online-users {
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  text-align: left; /* kuweka text upande wa kushoto */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#onlineUserList li {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+#onlineUserList img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="chat-header">
+     <h3 style="margin: 0;">SmilUp Chatroom</h3>
+     <div id="online-users" style="padding: 5px; font-size: 14px; background: #ecfdf5; color: #2d6a4f;"></div>
+     <div class="dropdown">
+     <button onclick="toggleDropdown()" class="dropbtn">☰</button>
+     <div id="dropdownContent" class="dropdown-content">
+     <a href="#" onclick="window.location.href='settings.html'">⚙️ Settings</a>
+     <a href="#" onclick="logout()">🚪 Logout</a>
+    </div>
+  </div>   
+</div>
+    <div id="chat-body"></div>
+    <div class="chat-footer">
+      <input type="text" id="messageInput" placeholder="Type..." onkeypress="if(event.key === 'Enter') sendMessage()" />
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import { getDatabase, ref as dbRef, onDisconnect, set, remove, push, onChildAdded, onChildRemoved } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDS1rqg5FGHJoCrFcn61yJOvpTo-o5vspk",
+    authDomain: "smilupchat.firebaseapp.com",
+    databaseURL: "https://smilupchat-default-rtdb.firebaseio.com",
+    projectId: "smilupchat",
+    storageBucket: "smilupchat.appspot.com",
+    messagingSenderId: "484535306317",
+    appId: "1:484535306317:web:b844a39520327bf1347404",
+    measurementId: "G-9RSV87YW3T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const chatRef = dbRef(db, 'chats');
+
+  const username = localStorage.getItem("username");
+  const profileURL = localStorage.getItem("profileImage");
+
+  if (!username) {
+    window.location.href = "User-Sign_in.html";
+  }
+
+  // Orodhesha online
+  const onlineRef = dbRef(db, 'onlineUsers/' + username);
+  set(onlineRef, {
+    name: username,
+    profile: profileURL,
+    timestamp: Date.now()
+  });
+  onDisconnect(onlineRef).remove();
+
+  // Kutuma ujumbe
+  window.sendMessage = () => {
+    const input = document.getElementById("messageInput");
+    const msg = input.value.trim();
+    if (msg === "") return;
+
+    push(chatRef, {
+      name: username,
+      message: msg,
+      profile: profileURL,
+      timestamp: Date.now()
+    });
+
+    input.value = "";
+  };
+
+  // Ongeza ujumbe kwenye chat
+  const chatBody = document.getElementById("chat-body");
+  const notificationSound = document.getElementById("notificationSound");
+
+  onChildAdded(chatRef, (data) => {
+    const val = data.val();
+    const isMine = val.name === username;
+
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `message ${isMine ? 'sent' : 'received'}`;
+    msgDiv.innerHTML = `
+      <div class="chat-message">
+        <img src="${val.profile}" class="chat-avatar" />
+        <div>
+          <div class="bubble">
+            ${!isMine ? `<strong>${val.name}</strong><br>` : ""}
+            ${val.message}
+          </div>
+          <div class="time">${new Date(val.timestamp).toLocaleTimeString()}</div>
+        </div>
+      </div>
+    `;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+  // Play sound if the message is not from the current user
+  if (!isMine) {
+    notificationSound.play().catch(e => console.log("Sound blocked by browser"));
+  }
+});
+
+  // Online users display
+  const onlineUsersRef = dbRef(db, 'onlineUsers');
+  const onlineDiv = document.getElementById("online-users");
+  const onlineMap = new Map();
+
+function updateOnlineUI() {
+  onlineDiv.innerHTML = `
+    <span style="font-weight: bold; display: flex; align-items: center; gap: 6px;">
+      <span class="online-dot"></span>
+    </span>` + 
+    Array.from(onlineMap.values()).map(user => 
+      `<img src="${user.profile}" title="${user.name}" style="width: 25px; height: 25px; border-radius: 50%; margin: 2px;">`
+    ).join('');
+}
+
+    onChildAdded(onlineUsersRef, (data) => {
+    onlineMap.set(data.key, data.val());
+    updateOnlineUI();
+  });
+
+  onChildRemoved(onlineUsersRef, (data) => {
+    onlineMap.delete(data.key);
+    updateOnlineUI();
+  });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log("✔ Service Worker registered"))
+      .catch(err => console.error("❌ Service Worker failed", err));
+  }
+</script>
+<script>
+  // Angalia ikiwa Dark Mode iko kwenye localStorage na weka kwenye body
+  window.addEventListener("load", () => {
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    document.querySelector(".container").classList.add("dark-mode");
+    document.querySelectorAll("button").forEach(btn => btn.classList.add("dark-mode"));
+    document.querySelectorAll("input").forEach(input => input.classList.add("dark-mode"));
+  }
+});
+</script>
+
+<script>
+  function toggleDropdown() {
+    document.getElementById("dropdownContent").classList.toggle("show");
+  }
+
+  function openProfile() {
+    alert("Hii ni sehemu ya wasifu (Profile)."); // Badilisha na ukurasa halisi kama uko tayari
+    // window.location.href = "profile.html";
+  }
+
+  function openSettings() {
+    alert("Hii ni sehemu ya mipangilio (Settings)."); // Badilisha na ukurasa halisi kama uko tayari
+    // window.location.href = "settings.html";
+  }
+
+  function logout() {
+    localStorage.removeItem("username");
+    localStorage.removeItem("profileImage");
+    window.location.href = "User-Sign_in.html";
+  }
+
+const username = localStorage.getItem("username");
+const profileURL = localStorage.getItem("profileImage");
+
+if (!username) {
+  window.location.href = "User-Sign_in.html";
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const profileURL = localStorage.getItem("profileImage");
+  const username = localStorage.getItem("username");
+
+  const dropdownContent = document.getElementById("dropdownContent");
+
+  const profilePreview = document.createElement("div");
+  profilePreview.style.padding = "10px";
+  profilePreview.style.display = "flex";
+  profilePreview.style.alignItems = "center";
+  profilePreview.style.borderBottom = "1px solid #eee";
+
+  profilePreview.innerHTML = `
+    <img src="${profileURL}" alt="avatar" style="width: 35px; height: 35px; border-radius: 40%; object-fit: cover; margin-right: 10px;">
+    <div>
+      <strong style="font-size: 15px;">${username}</strong>
+      <span style="font-size: 13px; color: gray;">My Profile</span>
+    </div>
+  `;
+
+  // Insert at the top of dropdown
+  dropdownContent.prepend(profilePreview);
+});
+
+  window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      for (let i = 0; i < dropdowns.length; i++) {
+        const openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+</script>
+<audio id="notificationSound" src="sounds/pop-sms.mp3" preload="auto"></audio>
+
+</body>
+</html>
